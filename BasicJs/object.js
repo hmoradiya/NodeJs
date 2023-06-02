@@ -11,6 +11,7 @@ const myData = {
 console.log(myData);
 myData.greet();
 
+// get specific data from object
 const extractName = (myData) => {
     console.log("My School name is", myData.school)
 }
