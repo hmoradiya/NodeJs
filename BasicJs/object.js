@@ -10,3 +10,9 @@ const myData = {
 
 console.log(myData);
 myData.greet();
+
+const extractName = (myData) => {
+    console.log("My School name is", myData.school)
+}
+
+extractName(myData);
