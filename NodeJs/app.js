@@ -1,24 +1,26 @@
-const path = require('path');
-
 const express = require('express');
-const bodyParser = require('body-parser');
+const expressLayouts = require('express-ejs-layouts');
+const mongoose = require('mongoose');
 
 const app = express();
 
-app.set('view engine', 'pug');
-app.set('views', 'views');
+//DB config
+const db = require('./config/keys').MongoURL;
 
-const adminData = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
+//Connect to MongoDB
+mongoose.connect(db, {useNewUrlParser: true}).then(() => console.log("DB Connected")).catch(err => console.log(err));
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname, 'public')));
+//EJS
+app.use(expressLayouts);
+app.set('view engine', 'ejs');
 
-app.use('/admin', adminData.routes);
-app.use(shopRoutes);
+//BodyParser 
+app.use(express.urlencoded({ extended  : false }));
 
-app.use((req, res, next) => {
-    res.render('404', { docTitle: "Page Not Found"})
-});
+//routes
+app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
 
-app.listen(3000);
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, console.log(`Server listening on port ${PORT}`));
